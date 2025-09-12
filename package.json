@@ -2,18 +2,18 @@
   "name": "top-github-dependents-by-stars",
   "version": "0.0.0",
   "description": "CLI tool for sorting dependents repositories and packages by stars",
-  "type": "commonjs",
+  "type": "module",
   "bin": {
-    "top-github-dependents-by-stars": "./dist/index.js"
+    "top-github-dependents-by-stars": "./dist/index.mjs"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && mv dist/index.js dist/index.mjs",
     "dev": "tsdown --watch",
-    "start": "node dist/index.js",
-    "top-github-dependents-by-stars": "node dist/index.js",
+    "start": "node dist/index.mjs",
+    "top-github-dependents-by-stars": "node dist/index.mjs",
     "prepublishOnly": "pnpm run build"
   },
   "keywords": [
