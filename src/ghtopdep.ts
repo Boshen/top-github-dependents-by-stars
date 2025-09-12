@@ -62,27 +62,6 @@ export class GhTopDep {
     throw lastError;
   }
 
-  private async fetchDescription(owner: string, repository: string): Promise<string> {
-    try {
-      const { data } = await this.octokit.repos.get({
-        owner,
-        repo: repository
-      });
-
-      if (data.description) {
-        // Truncate long descriptions
-        const maxLength = 60;
-        if (data.description.length > maxLength) {
-          return data.description.substring(0, maxLength - 3) + '...';
-        }
-        return data.description;
-      }
-    } catch (error) {
-      console.error(`Failed to fetch description for ${owner}/${repository}`);
-    }
-
-    return ' ';
-  }
 
   private async getMaxDeps(url: string): Promise<number> {
     const html = await this.fetchPage(url);
@@ -164,9 +143,6 @@ export class GhTopDep {
               stars: repoStarsNum
             };
 
-            // Always fetch description
-            const [, repoOwner, repoName] = relativeRepoUrl.split('/');
-            repo.description = await this.fetchDescription(repoOwner, repoName);
 
             repos.push(repo);
           }
@@ -256,14 +232,14 @@ export class GhTopDep {
         
         // Create table
         const table = new Table({
-          head: ['URL', 'Stars', 'Description'],
+          head: ['URL', 'Stars'],
           style: {
             head: ['cyan']
           }
         });
 
         for (const repo of readableRepos) {
-          table.push([repo.url, repo.stars, repo.description || '']);
+          table.push([repo.url, repo.stars]);
         }
 
         console.log(table.toString());

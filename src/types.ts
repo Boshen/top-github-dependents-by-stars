@@ -1,7 +1,6 @@
 export interface Repository {
   url: string;
   stars: number;
-  description?: string;
 }
 
 export interface CliOptions {
