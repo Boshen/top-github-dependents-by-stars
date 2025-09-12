@@ -1,6 +1,6 @@
-# ghtopdep - TypeScript Implementation
+# top-github-dependents-by-stars
 
-A TypeScript port of [ghtopdep](https://github.com/github-tooling/ghtopdep) - CLI tool for sorting GitHub repository dependents by stars.
+A TypeScript implementation of a CLI tool for sorting GitHub repository dependents by stars. Based on [ghtopdep](https://github.com/github-tooling/ghtopdep).
 
 ## Features
 
@@ -15,7 +15,7 @@ A TypeScript port of [ghtopdep](https://github.com/github-tooling/ghtopdep) - CL
 ## Installation
 
 ```bash
-pnpm install -g ghtopdep
+pnpm install -g top-github-dependents-by-stars
 ```
 
 Or run locally:
@@ -31,26 +31,26 @@ pnpm start -- <github-repo-url>
 Basic usage:
 
 ```bash
-ghtopdep https://github.com/owner/repo
+top-github-dependents-by-stars https://github.com/owner/repo
 ```
 
 With options:
 
 ```bash
 # Show top 20 repositories with at least 10 stars
-ghtopdep https://github.com/facebook/react --rows 20 --minstar 10
+top-github-dependents-by-stars https://github.com/facebook/react --rows 20 --minstar 10
 
 # Include descriptions (requires token)
-ghtopdep https://github.com/facebook/react --description --token YOUR_GITHUB_TOKEN
+top-github-dependents-by-stars https://github.com/facebook/react --description --token YOUR_GITHUB_TOKEN
 
 # Output as JSON
-ghtopdep https://github.com/facebook/react --json
+top-github-dependents-by-stars https://github.com/facebook/react --json
 
 # Search for specific code in dependents
-ghtopdep https://github.com/facebook/react --search "useState" --token YOUR_GITHUB_TOKEN
+top-github-dependents-by-stars https://github.com/facebook/react --search "useState" --token YOUR_GITHUB_TOKEN
 
 # Sort packages instead of repositories
-ghtopdep https://github.com/npm/cli --packages
+top-github-dependents-by-stars https://github.com/npm/cli --packages
 ```
 
 ## Options

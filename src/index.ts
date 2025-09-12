@@ -12,7 +12,7 @@ dotenv.config();
 const program = new Command();
 
 program
-  .name('ghtopdep')
+  .name('top-github-dependents-by-stars')
   .description('CLI tool for sorting dependents repositories and packages by stars')
   .version(CONSTANTS.VERSION)
   .argument('<url>', 'GitHub repository URL')

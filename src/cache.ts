@@ -13,7 +13,7 @@ export class CacheManager {
     this.memCache = new NodeCache({ stdTTL: 86400 });
     
     // File cache directory
-    this.cacheDir = path.join(os.homedir(), '.cache', 'ghtopdep');
+    this.cacheDir = path.join(os.homedir(), '.cache', 'top-github-dependents-by-stars');
     if (!fs.existsSync(this.cacheDir)) {
       fs.mkdirSync(this.cacheDir, { recursive: true });
     }

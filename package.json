@@ -1,16 +1,16 @@
 {
-  "name": "top-github-dependents",
+  "name": "top-github-dependents-by-stars",
   "version": "0.0.0",
   "description": "CLI tool for sorting dependents repositories and packages by stars",
   "main": "dist/index.js",
   "bin": {
-    "ghtopdep": "./dist/index.js"
+    "top-github-dependents-by-stars": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "ghtopdep": "node dist/index.js",
+    "top-github-dependents-by-stars": "node dist/index.js",
     "prepublish": "pnpm run build"
   },
   "keywords": [

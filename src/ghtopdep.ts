@@ -40,7 +40,7 @@ export class GhTopDep {
       try {
         const response = await axios.get(url, {
           headers: {
-            'User-Agent': 'ghtopdep/0.4.3'
+            'User-Agent': 'top-github-dependents-by-stars/0.0.0'
           },
           timeout: 30000
         });

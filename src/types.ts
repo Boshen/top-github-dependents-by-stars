@@ -21,7 +21,7 @@ export interface PaginationButton {
 }
 
 export const CONSTANTS = {
-  PACKAGE_NAME: 'ghtopdep',
+  PACKAGE_NAME: 'top-github-dependents-by-stars',
   GITHUB_URL: 'https://github.com',
   REPOS_PER_PAGE: 30,
   NEXT_BUTTON_SELECTOR: '#dependents > div.paginate-container > div > a',
@@ -33,5 +33,5 @@ export const CONSTANTS = {
   DEFAULT_MINSTAR: 5,
   BASE_URL_PROD: 'http://159.223.231.170',
   BASE_URL_DEV: 'http://127.0.0.1:3000',
-  VERSION: '0.4.3'
+  VERSION: '0.0.0'
 };
