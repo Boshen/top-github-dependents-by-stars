@@ -12,7 +12,7 @@ export interface CliOptions {
   rows: number;
   minstar: number;
   search?: string;
-  token?: string;
+  token: string;
 }
 
 export interface PaginationButton {

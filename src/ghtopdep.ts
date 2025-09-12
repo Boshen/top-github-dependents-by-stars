@@ -10,18 +10,17 @@ import { CacheManager } from './cache';
 
 export class GhTopDep {
   private cache: CacheManager;
-  private octokit?: Octokit;
+  private octokit: Octokit;
   private options: CliOptions;
 
   constructor(options: CliOptions) {
     this.options = options;
     this.cache = new CacheManager();
     
-    if (options.token) {
-      this.octokit = new Octokit({
-        auth: options.token
-      });
-    }
+    // Always initialize Octokit since token is required
+    this.octokit = new Octokit({
+      auth: options.token
+    });
   }
 
   private async fetchPage(url: string): Promise<string> {
@@ -64,10 +63,6 @@ export class GhTopDep {
   }
 
   private async fetchDescription(owner: string, repository: string): Promise<string> {
-    if (!this.octokit) {
-      return '';
-    }
-
     try {
       const { data } = await this.octokit.repos.get({
         owner,
@@ -124,12 +119,7 @@ export class GhTopDep {
       }
     }
 
-    // Check for token if needed
-    if ((this.options.description || this.options.search) && !this.options.token) {
-      console.error(chalk.red('Please provide token with --token or GHTOPDEP_TOKEN environment variable'));
-      process.exit(1);
-    }
-
+    // Token is now always available, no need to check
     const repos: Repository[] = [];
     let moreThanZeroCount = 0;
     let totalReposCount = 0;
@@ -251,7 +241,7 @@ export class GhTopDep {
     const sortedRepos = sortRepos(repos, this.options.rows);
 
     // Handle search mode
-    if (this.options.search && this.octokit) {
+    if (this.options.search) {
       await this.searchInRepos(repos, this.options.search);
     } else {
       this.displayResults(sortedRepos, totalReposCount, moreThanZeroCount, destinations);
@@ -261,8 +251,6 @@ export class GhTopDep {
   }
 
   private async searchInRepos(repos: Repository[], searchQuery: string): Promise<void> {
-    if (!this.octokit) return;
-
     console.log(chalk.cyan(`Searching for "${searchQuery}" in dependent repositories...`));
     
     for (const repo of repos) {
