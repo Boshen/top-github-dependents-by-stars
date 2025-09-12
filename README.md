@@ -57,7 +57,6 @@ top-github-dependents-by-stars https://github.com/npm/cli --packages
 
 - `--repositories` / `--packages` - Sort repositories or packages (default: repositories)
 - `--table` / `--json` - Output format (default: table)
-- `--description` - Show repository descriptions (requires token)
 - `--rows <number>` - Number of repositories to show (default: 10)
 - `--minstar <number>` - Minimum number of stars (default: 5)
 - `--search <query>` - Search code in dependents (requires token)

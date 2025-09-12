@@ -164,10 +164,9 @@ export class GhTopDep {
               stars: repoStarsNum
             };
 
-            if (this.options.description) {
-              const [, repoOwner, repoName] = relativeRepoUrl.split('/');
-              repo.description = await this.fetchDescription(repoOwner, repoName);
-            }
+            // Always fetch description
+            const [, repoOwner, repoName] = relativeRepoUrl.split('/');
+            repo.description = await this.fetchDescription(repoOwner, repoName);
 
             repos.push(repo);
           }
@@ -257,20 +256,14 @@ export class GhTopDep {
         
         // Create table
         const table = new Table({
-          head: this.options.description 
-            ? ['URL', 'Stars', 'Description']
-            : ['URL', 'Stars'],
+          head: ['URL', 'Stars', 'Description'],
           style: {
             head: ['cyan']
           }
         });
 
         for (const repo of readableRepos) {
-          if (this.options.description) {
-            table.push([repo.url, repo.stars, repo.description || '']);
-          } else {
-            table.push([repo.url, repo.stars]);
-          }
+          table.push([repo.url, repo.stars, repo.description || '']);
         }
 
         console.log(table.toString());
