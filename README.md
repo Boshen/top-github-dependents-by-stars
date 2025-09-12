@@ -62,12 +62,10 @@ top-github-dependents-by-stars https://github.com/npm/cli --packages
 - `--minstar <number>` - Minimum number of stars (default: 5)
 - `--search <query>` - Search code in dependents (requires token)
 - `--token <token>` - GitHub authentication token
-- `--report` - Report results to backend service
 
 ## Environment Variables
 
 - `GHTOPDEP_TOKEN` - GitHub token for authentication
-- `GHTOPDEP_ENV` - Set to "development" for local backend
 
 ## Development
 

@@ -5,7 +5,7 @@ import Table from 'cli-table3';
 import cliProgress from 'cli-progress';
 import chalk from 'chalk';
 import { Repository, CliOptions, CONSTANTS } from './types';
-import { alreadyAdded, sortRepos, readableStars, parseGitHubUrl, getBaseUrl } from './utils';
+import { alreadyAdded, sortRepos, readableStars, parseGitHubUrl } from './utils';
 import { CacheManager } from './cache';
 
 export class GhTopDep {
@@ -104,20 +104,6 @@ export class GhTopDep {
     const destination = this.options.repositories ? 'REPOSITORY' : 'PACKAGE';
     const destinations = this.options.repositories ? 'repositories' : 'packages';
 
-    // Check backend report first if requested
-    if (this.options.report) {
-      try {
-        const baseUrl = getBaseUrl();
-        const response = await axios.get(`${baseUrl}/repos/${owner}/${repository}`);
-        if (response.status === 200) {
-          const sorted = sortRepos(response.data, this.options.rows);
-          this.displayResults(sorted, 0, 0, destinations);
-          return sorted;
-        }
-      } catch (error) {
-        // Fall through to scraping
-      }
-    }
 
     // Token is now always available, no need to check
     const repos: Repository[] = [];
@@ -223,20 +209,6 @@ export class GhTopDep {
       progressBar.stop();
     }
 
-    // Report to backend if requested
-    if (this.options.report) {
-      try {
-        const baseUrl = getBaseUrl();
-        await axios.post(`${baseUrl}/repos`, {
-          url,
-          owner,
-          repository,
-          deps: repos
-        });
-      } catch (error) {
-        console.error(chalk.yellow('Failed to report to backend'));
-      }
-    }
 
     const sortedRepos = sortRepos(repos, this.options.rows);
 

@@ -20,7 +20,6 @@ program
   .option('--packages', 'Sort packages')
   .option('--table', 'Table view mode (default)', true)
   .option('--json', 'JSON output mode')
-  .option('--report', 'Report to backend', false)
   .option('--description', 'Show description of packages or repositories', false)
   .option('--rows <number>', 'Number of repositories to show', String(CONSTANTS.DEFAULT_ROWS))
   .option('--minstar <number>', 'Minimum number of stars', String(CONSTANTS.DEFAULT_MINSTAR))
@@ -39,7 +38,6 @@ program
       const cliOptions: CliOptions = {
         repositories: !options.packages,
         table: !options.json,
-        report: options.report || false,
         description: options.description || false,
         rows: parseInt(options.rows, 10) || CONSTANTS.DEFAULT_ROWS,
         minstar: parseInt(options.minstar, 10) || CONSTANTS.DEFAULT_MINSTAR,

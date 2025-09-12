@@ -7,7 +7,6 @@ export interface Repository {
 export interface CliOptions {
   repositories: boolean;
   table: boolean;
-  report: boolean;
   description: boolean;
   rows: number;
   minstar: number;

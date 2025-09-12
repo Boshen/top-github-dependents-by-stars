@@ -34,8 +34,3 @@ export function parseGitHubUrl(url: string): { owner: string; repository: string
   const [, owner, repository] = urlObj.pathname.split('/');
   return { owner, repository };
 }
-
-export function getBaseUrl(): string {
-  const mode = process.env.GHTOPDEP_ENV;
-  return mode === 'development' ? 'http://127.0.0.1:3000' : 'http://159.223.231.170';
-}
