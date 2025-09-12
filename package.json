@@ -23,8 +23,18 @@
     "stars",
     "cli"
   ],
-  "author": "",
+  "author": "Boshen",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/boshen/top-github-dependents-by-stars.git"
+  },
+  "bugs": {
+    "url": "https://github.com/boshen/top-github-dependents-by-stars/issues"
+  },
   "dependencies": {
     "@octokit/rest": "^20.0.2",
     "axios": "^1.6.2",
@@ -41,15 +51,5 @@
     "@types/node": "^20.10.4",
     "tsdown": "^0.15.1",
     "typescript": "^5.3.3"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/boshen/github-dependents.git"
-  },
-  "bugs": {
-    "url": "https://github.com/boshen/github-dependents/issues"
   }
 }
