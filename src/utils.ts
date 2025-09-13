@@ -1,35 +1,12 @@
-import { Repository } from './types';
+import { Repository, GitHubRepo } from './types';
 
-export function alreadyAdded(repoUrl: string, repos: Repository[]): boolean {
-  return repos.some(repo => repo.url === repoUrl);
-}
-
-export function sortRepos(repos: Repository[], rows: number): Repository[] {
+export function sortRepos(repos: Repository[], limit: number): Repository[] {
   return repos
     .sort((a, b) => b.stars - a.stars)
-    .slice(0, rows);
+    .slice(0, limit);
 }
 
-export function humanize(num: number): string | number {
-  if (num < 1000) {
-    return num;
-  } else if (num < 10000) {
-    return `${Math.round(num / 100) / 10}K`;
-  } else if (num < 1000000) {
-    return `${Math.round(num / 1000)}K`;
-  } else {
-    return num;
-  }
-}
-
-export function readableStars(repos: Repository[]): Repository[] {
-  return repos.map(repo => ({
-    ...repo,
-    stars: humanize(repo.stars) as any
-  }));
-}
-
-export function parseGitHubUrl(url: string): { owner: string; repository: string } {
+export function parseGitHubUrl(url: string): GitHubRepo {
   const urlObj = new URL(url);
   const [, owner, repository] = urlObj.pathname.split('/');
   return { owner, repository };
