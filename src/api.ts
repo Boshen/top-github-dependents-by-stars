@@ -56,17 +56,11 @@ export interface DependentsResult {
  * ```typescript
  * import { getDependents } from 'top-github-dependents-by-stars';
  *
- * // Token from GITHUB_TOKEN env var
- * const result = await getDependents('https://github.com/user/repo', {
+ * // Using owner/repo format
+ * const result = await getDependents('facebook/react', {
  *   type: 'repositories',
  *   rows: 50,
  *   minStars: 10
- * });
- *
- * // Or provide token explicitly
- * const result = await getDependents('https://github.com/user/repo', {
- *   token: 'your-github-token',
- *   type: 'repositories'
  * });
  *
  * console.log(result.repositories);
@@ -74,13 +68,15 @@ export interface DependentsResult {
  * ```
  */
 export async function getDependents(
-  repoUrl: string,
+  repo: string,
   options: ApiOptions = {}
 ): Promise<DependentsResult> {
-  // Validate URL
-  if (!repoUrl.startsWith('https://github.com/')) {
-    throw new Error('Invalid GitHub repository URL. Must start with https://github.com/');
+  // Validate and format repository input
+  if (!repo.match(/^[\w-]+\/[\w.-]+$/)) {
+    throw new Error('Invalid repository format. Use "owner/repo" format (e.g., "facebook/react")');
   }
+
+  const repoUrl = `https://github.com/${repo}`;
 
   // Get token from options or environment variable
   const token = options.token || process.env.GITHUB_TOKEN;
@@ -129,17 +125,17 @@ export async function getDependents(
  * // or
  * const client = createClient({}); // uses GITHUB_TOKEN env var
  *
- * const result1 = await client.getDependents('https://github.com/user/repo1');
- * const result2 = await client.getDependents('https://github.com/user/repo2');
+ * const result1 = await client.getDependents('facebook/react');
+ * const result2 = await client.getDependents('vuejs/vue');
  * ```
  */
 export function createClient(defaultOptions: Partial<ApiOptions> = {}) {
   return {
     async getDependents(
-      repoUrl: string,
+      repo: string,
       options?: Partial<ApiOptions>
     ): Promise<DependentsResult> {
-      return getDependents(repoUrl, {
+      return getDependents(repo, {
         ...defaultOptions,
         ...options,
         token: options?.token || defaultOptions.token

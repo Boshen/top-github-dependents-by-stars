@@ -27,11 +27,14 @@ function parseCliOptions(options: any): CliOptions {
   };
 }
 
-function validateUrl(url: string): void {
-  if (!url.startsWith('https://github.com/')) {
-    console.error(chalk.red('Error: Please provide a valid GitHub repository URL'));
+function validateAndFormatRepo(repo: string): string {
+  // Validate owner/repo format
+  if (!repo.match(/^[\w-]+\/[\w.-]+$/)) {
+    console.error(chalk.red('Error: Invalid repository format. Use "owner/repo" format (e.g., "facebook/react")'));
     process.exit(1);
   }
+
+  return `https://github.com/${repo}`;
 }
 
 const program = new Command();
@@ -40,7 +43,7 @@ program
   .name(APP_INFO.NAME)
   .description('CLI tool for sorting dependents repositories and packages by stars')
   .version(APP_INFO.VERSION)
-  .argument('<url>', 'GitHub repository URL')
+  .argument('<repository>', 'GitHub repository in owner/repo format (e.g., facebook/react)')
   .option('--repositories', 'Sort repositories (default)', true)
   .option('--packages', 'Sort packages')
   .option('--table', 'Table view mode (default)', true)
@@ -49,13 +52,13 @@ program
   .option('--minstar <number>', 'Minimum number of stars', String(CONFIG.DEFAULTS.MIN_STARS))
   .option('--package <name>', 'Query specific package dependencies')
   .requiredOption('--token <token>', 'GitHub token for authentication (required)', process.env.GITHUB_TOKEN || process.env.GHTOPDEP_TOKEN)
-  .action(async (url: string, options: any) => {
+  .action(async (repo: string, options: any) => {
     try {
-      validateUrl(url);
+      const repoUrl = validateAndFormatRepo(repo);
       const cliOptions = parseCliOptions(options);
 
       const ghtopdep = new GhTopDep(cliOptions);
-      await ghtopdep.run(url);
+      await ghtopdep.run(repoUrl);
     } catch (error: any) {
       console.error(chalk.red('Error:'), error.message);
       process.exit(1);
