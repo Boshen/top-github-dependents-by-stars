@@ -33,9 +33,6 @@
   ],
   "author": "Boshen",
   "license": "MIT",
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/boshen/top-github-dependents-by-stars.git"
