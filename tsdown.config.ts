@@ -7,7 +7,7 @@ export default defineConfig({
   format: ['esm'],  // Use ESM format
   platform: 'node',
   target: 'node16',
-  dts: false,  // No need for .d.ts files for a CLI
+  dts: true,
   clean: true,
   shims: true,
   minify: false,
