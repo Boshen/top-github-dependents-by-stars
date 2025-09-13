@@ -35,10 +35,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/boshen/top-github-dependents-by-stars"
+    "url": "https://github.com/Boshen/top-github-dependents-by-stars"
   },
   "bugs": {
-    "url": "https://github.com/boshen/top-github-dependents-by-stars/issues"
+    "url": "https://github.com/Boshen/top-github-dependents-by-stars/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/Boshen"
