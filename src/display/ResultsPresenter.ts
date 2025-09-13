@@ -4,6 +4,20 @@ import { Repository, DependentStats } from '../types';
 import { formatStars } from './formatters';
 
 export class ResultsPresenter {
+  displayProjectInfo(repoUrl: string, entityType: string, packageName?: string): void {
+    // Extract owner/repo from URL
+    const match = repoUrl.match(/github\.com\/([^\/]+\/[^\/]+)/);
+    const repoName = match ? match[1] : repoUrl;
+
+    console.log('\n' + chalk.bold.cyan('═'.repeat(50)));
+    console.log(chalk.bold.cyan('Repository: ') + chalk.white(repoName));
+    console.log(chalk.bold.cyan('Type: ') + chalk.white(entityType));
+    if (packageName) {
+      console.log(chalk.bold.cyan('Package: ') + chalk.white(packageName));
+    }
+    console.log(chalk.bold.cyan('═'.repeat(50)) + '\n');
+  }
+
   displayTable(repositories: Repository[], stats: DependentStats, entityType: string): void {
     if (repositories.length === 0) {
       console.log(chalk.yellow(`No ${entityType} found`));
@@ -22,10 +36,10 @@ export class ResultsPresenter {
     }
 
     console.log(table.toString());
-    
+
     if (stats.totalCount > 0) {
-      console.log(chalk.gray(`found ${stats.totalCount} ${entityType}, others are private`));
-      console.log(chalk.gray(`found ${stats.withStarsCount} ${entityType} with more than zero stars`));
+      console.log(chalk.gray(`\nFound ${stats.totalCount} ${entityType}, others are private`));
+      console.log(chalk.gray(`Found ${stats.withStarsCount} ${entityType} with more than zero stars`));
     }
   }
 

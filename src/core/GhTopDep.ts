@@ -36,14 +36,17 @@ export class GhTopDep {
 
     // Fetch all dependents
     const { repositories, stats } = await this.fetchAllDependents(pageUrl, url);
-    
+
     // Sort and limit results
     const sortedRepos = sortRepos(repositories, this.options.rows);
-    
+
     // Display results
     const format = this.options.table ? 'table' : 'json';
+    if (format === 'table') {
+      this.presenter.displayProjectInfo(url, entityType, this.options.packageName);
+    }
     this.presenter.display(sortedRepos, stats, entityType, format);
-    
+
     return sortedRepos;
   }
 
