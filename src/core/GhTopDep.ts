@@ -55,6 +55,16 @@ export class GhTopDep {
 
       // First, check if we're already on a filtered page
       const initialHtml = await this.fetcher.fetchPage(baseUrl);
+
+      // Check if package filtering is available at all
+      if (!this.packageResolver.hasPackageFilter(initialHtml)) {
+        console.log(chalk.yellow(`Package filtering is not available for this repository.`));
+        console.log(chalk.yellow(`The repository might not have multiple packages or package information.`));
+        // Continue without package filtering
+        return baseUrl;
+      }
+
+      // Check if already filtered by the desired package
       const isFiltered = await this.packageResolver.isAlreadyFilteredByPackage(
         initialHtml,
         this.options.packageName

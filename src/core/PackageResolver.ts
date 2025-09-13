@@ -11,6 +11,12 @@ export class PackageResolver {
     this.fetcher = fetcher;
   }
 
+  hasPackageFilter(html: string): boolean {
+    const $ = cheerio.load(html);
+    const filterSummary = $(SELECTORS.PACKAGE_FILTER_SUMMARY);
+    return filterSummary.length > 0;
+  }
+
   async isAlreadyFilteredByPackage(html: string, packageName: string): Promise<boolean> {
     const $ = cheerio.load(html);
     const filterSummary = $(SELECTORS.PACKAGE_FILTER_SUMMARY);
