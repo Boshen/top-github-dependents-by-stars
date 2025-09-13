@@ -9,6 +9,7 @@ export interface CliOptions {
   rows: number;
   minstar: number;
   token: string;
+  packageName?: string;
 }
 
 export interface PaginationButton {

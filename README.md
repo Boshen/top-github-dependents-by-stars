@@ -6,9 +6,8 @@ A TypeScript implementation of a CLI tool for sorting GitHub repository dependen
 
 - Sort repository dependents by star count
 - Support for both repositories and packages
+- Query specific package dependencies by name
 - Table and JSON output modes
-- Optional repository descriptions (requires GitHub token)
-- Search code across dependent repositories
 - Caching for improved performance
 - Progress bar for large dependency lists
 
@@ -40,17 +39,17 @@ With options:
 # Show top 20 repositories with at least 10 stars
 top-github-dependents-by-stars https://github.com/facebook/react --rows 20 --minstar 10
 
-# Include descriptions (requires token)
-top-github-dependents-by-stars https://github.com/facebook/react --description --token YOUR_GITHUB_TOKEN
-
 # Output as JSON
 top-github-dependents-by-stars https://github.com/facebook/react --json
 
-# Search for specific code in dependents
-top-github-dependents-by-stars https://github.com/facebook/react --search "useState" --token YOUR_GITHUB_TOKEN
-
 # Sort packages instead of repositories
 top-github-dependents-by-stars https://github.com/npm/cli --packages
+
+# Query specific package dependencies
+top-github-dependents-by-stars https://github.com/oxc-project/oxc --package oxlint
+
+# Query package with scoped name
+top-github-dependents-by-stars https://github.com/oxc-project/oxc --package "@oxc-minify/binding-darwin-arm64"
 ```
 
 ## Options
@@ -59,6 +58,7 @@ top-github-dependents-by-stars https://github.com/npm/cli --packages
 - `--table` / `--json` - Output format (default: table)
 - `--rows <number>` - Number of repositories to show (default: 10)
 - `--minstar <number>` - Minimum number of stars (default: 5)
+- `--package <name>` - Query specific package dependencies
 - `--token <token>` - GitHub authentication token
 
 ## Environment Variables

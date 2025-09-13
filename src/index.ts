@@ -22,6 +22,7 @@ program
   .option('--json', 'JSON output mode')
   .option('--rows <number>', 'Number of repositories to show', String(CONSTANTS.DEFAULT_ROWS))
   .option('--minstar <number>', 'Minimum number of stars', String(CONSTANTS.DEFAULT_MINSTAR))
+  .option('--package <name>', 'Query specific package dependencies')
   .requiredOption('--token <token>', 'GitHub token for authentication (required)', process.env.GHTOPDEP_TOKEN)
   .action(async (url: string, options: any) => {
     try {
@@ -38,7 +39,8 @@ program
         table: !options.json,
         rows: parseInt(options.rows, 10) || CONSTANTS.DEFAULT_ROWS,
         minstar: parseInt(options.minstar, 10) || CONSTANTS.DEFAULT_MINSTAR,
-        token: token
+        token: token,
+        packageName: options.package
       };
 
       // Validate URL
