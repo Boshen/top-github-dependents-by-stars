@@ -14,7 +14,7 @@
     }
   },
   "bin": {
-    "top-github-dependents-by-stars": "./dist/cli.js"
+    "top-github-dependents-by-stars": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -22,8 +22,7 @@
   "scripts": {
     "build": "tsdown",
     "start": "node dist/index.js",
-    "prepublishOnly": "pnpm run build",
-    "publish": "npm publish --access public"
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "github",
