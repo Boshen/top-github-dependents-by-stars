@@ -10,7 +10,7 @@ import { CONFIG } from './config';
 dotenv.config();
 
 function parseCliOptions(options: any): CliOptions {
-  const token = options.token || process.env.GITHUB_TOKEN || process.env.GHTOPDEP_TOKEN;
+  const token = options.token || process.env.GITHUB_TOKEN;
 
   if (!token) {
     console.error(chalk.red('Error: GitHub token is required. Use --token or set GITHUB_TOKEN environment variable'));
@@ -51,7 +51,7 @@ program
   .option('--rows <number>', 'Number of repositories to show', String(CONFIG.DEFAULTS.ROWS))
   .option('--minstar <number>', 'Minimum number of stars', String(CONFIG.DEFAULTS.MIN_STARS))
   .option('--package <name>', 'Query specific package dependencies')
-  .requiredOption('--token <token>', 'GitHub token for authentication (required)', process.env.GITHUB_TOKEN || process.env.GHTOPDEP_TOKEN)
+  .requiredOption('--token <token>', 'GitHub token for authentication (required)', process.env.GITHUB_TOKEN)
   .action(async (repo: string, options: any) => {
     try {
       const repoUrl = validateAndFormatRepo(repo);

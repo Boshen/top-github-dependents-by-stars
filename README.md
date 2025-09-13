@@ -1,6 +1,6 @@
 # top-github-dependents-by-stars
 
-A TypeScript CLI tool and API for sorting GitHub repository dependents by stars. Find out which popular projects depend on your repository!
+A CLI tool and API for sorting GitHub repository dependents by stars. Find out which popular projects depend on your repository!
 
 ## Features
 
@@ -12,38 +12,30 @@ A TypeScript CLI tool and API for sorting GitHub repository dependents by stars.
 - 📈 Progress bar for large dependency lists
 - 🔧 Programmatic API for integration
 
-## Installation
-
-```bash
-npm install -g top-github-dependents-by-stars
-# or
-pnpm install -g top-github-dependents-by-stars
-```
-
 ## Usage
 
 ### CLI
 
-Basic usage (requires GitHub token):
+Basic usage (requires GitHub token due to GitHub rate limit):
 
 ```bash
 # Set your GitHub token (required)
 export GITHUB_TOKEN=your_github_token
 
 # Use owner/repo format
-top-github-dependents-by-stars facebook/react
+pnpm dlx top-github-dependents-by-stars facebook/react
 
 # Show top 20 repositories with at least 10 stars
-top-github-dependents-by-stars facebook/react --rows 20 --minstar 10
+pnpm dlx top-github-dependents-by-stars facebook/react --rows 20 --minstar 10
 
 # Output as JSON
-top-github-dependents-by-stars facebook/react --json
+pnpm dlx top-github-dependents-by-stars facebook/react --json
 
 # Sort packages instead of repositories
-top-github-dependents-by-stars npm/cli --packages
+pnpm dlx top-github-dependents-by-stars npm/cli --packages
 
 # Query specific package dependencies
-top-github-dependents-by-stars oxc-project/oxc --package oxlint
+pnpm dlx top-github-dependents-by-stars oxc-project/oxc --package oxlint
 ```
 
 ### Programmatic API
@@ -93,8 +85,7 @@ interface ApiOptions {
 
 ## Environment Variables
 
-- `GITHUB_TOKEN` - GitHub token for authentication (preferred)
-- `GHTOPDEP_TOKEN` - Legacy token variable (fallback)
+- `GITHUB_TOKEN` - GitHub token for authentication
 
 ## Authentication
 
@@ -115,21 +106,9 @@ pnpm run build
 GITHUB_TOKEN=your_token node dist/cli.js facebook/react
 ```
 
-## Repository Structure
+## Credits
 
-```
-src/
-├── api.ts              # Programmatic API
-├── cli.ts              # CLI entry point
-├── index.ts            # Main export
-├── core/               # Core business logic
-│   ├── GhTopDep.ts
-│   ├── DependentsFetcher.ts
-│   ├── DependentsParser.ts
-│   └── ...
-├── display/            # Output formatting
-└── types.ts            # TypeScript definitions
-```
+* https://github.com/andriyor/ghtopdep/
 
 ## License
 
