@@ -1,6 +1,6 @@
 {
   "name": "top-github-dependents-by-stars",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "CLI tool for sorting dependents repositories and packages by stars",
   "packageManager": "pnpm@10.15.1",
   "type": "module",
