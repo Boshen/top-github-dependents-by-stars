@@ -126,14 +126,18 @@ export class GhTopDep {
       processedCount += pageStats.totalCount || 0;
       stats.totalCount += pageStats.totalCount || 0;
       stats.withStarsCount += pageStats.withStarsCount || 0;
-      
-      // Update progress
-      this.progress.update(Math.min(processedCount, maxDeps));
-      
+
       // Get next page URL
       pageUrl = this.parser.parseNextPageUrl(html);
+
+      // Update progress - if this is the last page, set to 100%
+      if (!pageUrl) {
+        this.progress.update(maxDeps);
+      } else {
+        this.progress.update(Math.min(processedCount, maxDeps));
+      }
     }
-    
+
     this.progress.stop();
     
     return { repositories: allRepositories, stats };
