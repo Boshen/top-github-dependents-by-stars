@@ -3,8 +3,17 @@
   "version": "0.0.1",
   "description": "CLI tool for sorting dependents repositories and packages by stars",
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "bin": {
-    "top-github-dependents-by-stars": "./dist/index.js"
+    "top-github-dependents-by-stars": "./dist/cli.js"
   },
   "files": [
     "dist"
