@@ -59,7 +59,6 @@ top-github-dependents-by-stars https://github.com/npm/cli --packages
 - `--table` / `--json` - Output format (default: table)
 - `--rows <number>` - Number of repositories to show (default: 10)
 - `--minstar <number>` - Minimum number of stars (default: 5)
-- `--search <query>` - Search code in dependents (requires token)
 - `--token <token>` - GitHub authentication token
 
 ## Environment Variables

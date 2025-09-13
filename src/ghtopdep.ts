@@ -187,38 +187,11 @@ export class GhTopDep {
 
     const sortedRepos = sortRepos(repos, this.options.rows);
 
-    // Handle search mode
-    if (this.options.search) {
-      await this.searchInRepos(repos, this.options.search);
-    } else {
-      this.displayResults(sortedRepos, totalReposCount, moreThanZeroCount, destinations);
-    }
+    this.displayResults(sortedRepos, totalReposCount, moreThanZeroCount, destinations);
 
     return sortedRepos;
   }
 
-  private async searchInRepos(repos: Repository[], searchQuery: string): Promise<void> {
-    console.log(chalk.cyan(`Searching for "${searchQuery}" in dependent repositories...`));
-    
-    for (const repo of repos) {
-      const { owner, repository } = parseGitHubUrl(repo.url);
-      
-      try {
-        const { data } = await this.octokit.search.code({
-          q: `${searchQuery} repo:${owner}/${repository}`,
-          per_page: 5
-        });
-
-        if (data.items.length > 0) {
-          for (const item of data.items) {
-            console.log(`${item.html_url} with ${repo.stars} stars`);
-          }
-        }
-      } catch (error) {
-        // Silently skip repos we can't search
-      }
-    }
-  }
 
   private displayResults(
     repos: Repository[],
@@ -249,7 +222,7 @@ export class GhTopDep {
           console.log(chalk.gray(`found ${moreThanZeroCount} ${destinations} with more than zero star`));
         }
       } else {
-        console.log(chalk.yellow(`Doesn't find any ${destinations} that match search request`));
+        console.log(chalk.yellow(`No ${destinations} found`));
       }
     } else {
       // JSON output

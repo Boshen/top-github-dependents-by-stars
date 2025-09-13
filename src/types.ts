@@ -8,7 +8,6 @@ export interface CliOptions {
   table: boolean;
   rows: number;
   minstar: number;
-  search?: string;
   token: string;
 }
 
