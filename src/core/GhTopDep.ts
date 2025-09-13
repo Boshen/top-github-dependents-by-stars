@@ -49,20 +49,34 @@ export class GhTopDep {
 
   private async buildDependentsUrl(repoUrl: string, dependentType: DependentType): Promise<string | null> {
     let baseUrl = `${repoUrl}/network/dependents?dependent_type=${dependentType}`;
-    
+
     if (this.options.packageName) {
       console.log(chalk.cyan(`Looking for package: ${this.options.packageName}...`));
+
+      // First, check if we're already on a filtered page
+      const initialHtml = await this.fetcher.fetchPage(baseUrl);
+      const isFiltered = await this.packageResolver.isAlreadyFilteredByPackage(
+        initialHtml,
+        this.options.packageName
+      );
+
+      if (isFiltered) {
+        console.log(chalk.green(`Already on package "${this.options.packageName}" page!`));
+        return baseUrl;
+      }
+
+      // If not already filtered, resolve the package ID
       const packageInfo = await this.packageResolver.resolvePackage(repoUrl, this.options.packageName);
-      
+
       if (!packageInfo.id) {
         this.packageResolver.displayPackageNotFound(this.options.packageName, packageInfo.availablePackages);
         return null;
       }
-      
+
       console.log(chalk.green(`Found package "${this.options.packageName}"!`));
       baseUrl = `${repoUrl}/network/dependents?package_id=${packageInfo.id}&dependent_type=${dependentType}`;
     }
-    
+
     return baseUrl;
   }
 

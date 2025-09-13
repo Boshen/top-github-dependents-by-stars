@@ -29,4 +29,5 @@ export const SELECTORS = {
   STARS: 'div > span:nth-child(1)',
   PACKAGE_OPTION: 'a.select-menu-item[href*="package_id"]',
   PACKAGE_NAME: '.select-menu-item-text',
+  PACKAGE_FILTER_SUMMARY: 'summary[aria-label="Filter by Package"]',
 };

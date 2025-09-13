@@ -11,6 +11,19 @@ export class PackageResolver {
     this.fetcher = fetcher;
   }
 
+  async isAlreadyFilteredByPackage(html: string, packageName: string): Promise<boolean> {
+    const $ = cheerio.load(html);
+    const filterSummary = $(SELECTORS.PACKAGE_FILTER_SUMMARY);
+
+    if (filterSummary.length > 0) {
+      const summaryText = filterSummary.text().trim();
+      // Check if the summary contains the package name
+      return summaryText.includes(packageName);
+    }
+
+    return false;
+  }
+
   async resolvePackage(repoUrl: string, packageName: string): Promise<PackageInfo> {
     const html = await this.fetcher.fetchPage(`${repoUrl}/network/dependents`);
     const $ = cheerio.load(html);
