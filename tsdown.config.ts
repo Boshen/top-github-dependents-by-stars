@@ -14,13 +14,4 @@ export default defineConfig({
   sourcemap: false,
   unbundle: false,  // Bundle all dependencies for standalone CLI
   external: [],  // Bundle everything for a standalone executable
-  outExtension: {
-    '.js': '.mjs'
-  },
-  esbuildOptions: {
-    // Preserve the shebang for CLI execution
-    banner: {
-      js: '#!/usr/bin/env node'
-    }
-  }
 })

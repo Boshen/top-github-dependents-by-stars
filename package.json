@@ -4,16 +4,15 @@
   "description": "CLI tool for sorting dependents repositories and packages by stars",
   "type": "module",
   "bin": {
-    "top-github-dependents-by-stars": "./dist/index.mjs"
+    "top-github-dependents-by-stars": "./dist/index.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsdown && mv dist/index.js dist/index.mjs",
+    "build": "tsdown",
     "dev": "tsdown --watch",
-    "start": "node dist/index.mjs",
-    "top-github-dependents-by-stars": "node dist/index.mjs",
+    "start": "node dist/index.js",
     "prepublishOnly": "pnpm run build"
   },
   "keywords": [
@@ -36,20 +35,20 @@
     "url": "https://github.com/boshen/top-github-dependents-by-stars/issues"
   },
   "dependencies": {
-    "@octokit/rest": "^20.0.2",
-    "axios": "^1.6.2",
-    "chalk": "^4.1.2",
-    "cheerio": "^1.0.0-rc.12",
+    "@octokit/rest": "^22.0.0",
+    "axios": "^1.12.1",
+    "chalk": "^5.6.2",
+    "cheerio": "^1.1.2",
     "cli-progress": "^3.12.0",
-    "cli-table3": "^0.6.3",
-    "commander": "^11.1.0",
-    "dotenv": "^16.3.1",
+    "cli-table3": "^0.6.5",
+    "commander": "^14.0.1",
+    "dotenv": "^17.2.2",
     "node-cache": "^5.1.2"
   },
   "devDependencies": {
-    "@types/cli-progress": "^3.11.5",
-    "@types/node": "^20.10.4",
+    "@types/cli-progress": "^3.11.6",
+    "@types/node": "^24.3.3",
     "tsdown": "^0.15.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.2"
   }
 }
