@@ -13,7 +13,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "start": "node dist/index.js",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "publish": "npm publish --access public"
   },
   "keywords": [
     "github",
