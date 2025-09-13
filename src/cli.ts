@@ -2,12 +2,9 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import dotenv from 'dotenv';
 import { GhTopDep } from './core/GhTopDep';
 import { CliOptions, APP_INFO } from './types';
 import { CONFIG } from './config';
-
-dotenv.config();
 
 function parseCliOptions(options: any): CliOptions {
   const token = options.token || process.env.GITHUB_TOKEN;
