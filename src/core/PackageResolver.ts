@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import chalk from 'chalk';
 import { PackageInfo } from '../types';
-import { SELECTORS, CONFIG } from '../config';
+import { SELECTORS } from '../config';
 import { DependentsFetcher } from './DependentsFetcher';
 
 export class PackageResolver {

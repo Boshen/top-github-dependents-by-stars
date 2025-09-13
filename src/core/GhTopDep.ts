@@ -1,8 +1,6 @@
-import { Octokit } from '@octokit/rest';
 import chalk from 'chalk';
 import { Repository, CliOptions, DependentType, DependentStats } from '../types';
-import { parseGitHubUrl, sortRepos } from '../utils';
-import { CONFIG } from '../config';
+import { sortRepos } from '../utils';
 import { DependentsFetcher } from './DependentsFetcher';
 import { PackageResolver } from './PackageResolver';
 import { DependentsParser } from './DependentsParser';
@@ -10,7 +8,6 @@ import { ProgressTracker } from './ProgressTracker';
 import { ResultsPresenter } from '../display/ResultsPresenter';
 
 export class GhTopDep {
-  private octokit: Octokit;
   private options: CliOptions;
   private fetcher: DependentsFetcher;
   private packageResolver: PackageResolver;
@@ -20,7 +17,6 @@ export class GhTopDep {
 
   constructor(options: CliOptions) {
     this.options = options;
-    this.octokit = new Octokit({ auth: options.token });
     
     // Initialize components
     this.fetcher = new DependentsFetcher();
@@ -31,7 +27,6 @@ export class GhTopDep {
   }
 
   async run(url: string): Promise<Repository[]> {
-    const { owner, repository } = parseGitHubUrl(url);
     const dependentType = this.options.repositories ? DependentType.REPOSITORY : DependentType.PACKAGE;
     const entityType = this.options.repositories ? 'repositories' : 'packages';
 
