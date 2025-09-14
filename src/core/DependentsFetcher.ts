@@ -1,23 +1,13 @@
 import axios from 'axios';
 import chalk from 'chalk';
-import { CacheManager } from '../cache';
 import { CONFIG } from '../config';
 
 export class DependentsFetcher {
-  private cache: CacheManager;
-
   constructor() {
-    this.cache = new CacheManager();
   }
 
   async fetchPage(url: string): Promise<string> {
-    const cached = await this.cache.get(url);
-    if (cached) {
-      return cached;
-    }
-
     const html = await this.fetchWithRetry(url);
-    await this.cache.set(url, html);
     return html;
   }
 
