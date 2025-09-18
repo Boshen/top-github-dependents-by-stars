@@ -26,7 +26,7 @@ export class GhTopDep {
     this.presenter = new ResultsPresenter();
   }
 
-  async run(url: string): Promise<Repository[]> {
+  async run(url: string): Promise<{ repositories: Repository[]; latestDependents: Repository[]; stats: DependentStats }> {
     const dependentType = this.options.repositories ? DependentType.REPOSITORY : DependentType.PACKAGE;
     const entityType = this.options.repositories ? 'repositories' : 'packages';
 
@@ -37,17 +37,18 @@ export class GhTopDep {
     // Fetch all dependents
     const { repositories, stats } = await this.fetchAllDependents(pageUrl, url);
 
-    // Sort and limit results
-    const sortedRepos = sortRepos(repositories, this.options.rows);
+    // Create two views of the data
+    const sortedRepos = sortRepos(repositories, this.options.rows); // Top by stars
+    const latestDependents = repositories.slice(0, this.options.rows); // Latest in discovery order
 
     // Display results
     const format = this.options.table ? 'table' : 'json';
     if (format === 'table') {
       this.presenter.displayProjectInfo(url, entityType, this.options.packageName);
     }
-    this.presenter.display(sortedRepos, stats, entityType, format);
+    this.presenter.display(sortedRepos, latestDependents, stats, entityType, format);
 
-    return sortedRepos;
+    return { repositories: sortedRepos, latestDependents, stats };
   }
 
   private async buildDependentsUrl(repoUrl: string, dependentType: DependentType): Promise<string | null> {

@@ -40,6 +40,11 @@ export interface DependentsResult {
   repositories: Repository[];
 
   /**
+   * Array of latest dependent repositories (in GitHub's natural discovery order)
+   */
+  latestDependents: Repository[];
+
+  /**
    * Statistics about the fetch operation
    */
   stats: {
@@ -99,16 +104,16 @@ export async function getDependents(
   // Create instance and run
   const ghtopdep = new GhTopDep(cliOptions);
 
-  // We need to modify GhTopDep to return stats as well
-  // For now, return the repositories
-  const repositories = await ghtopdep.run(repoUrl);
+  // Get the result with both arrays and stats
+  const result = await ghtopdep.run(repoUrl);
 
   return {
-    repositories,
+    repositories: result.repositories,
+    latestDependents: result.latestDependents,
     stats: {
-      totalDependents: repositories.length,
-      withStars: repositories.filter(r => r.stars > 0).length,
-      fetchedRepos: repositories.length
+      totalDependents: result.stats.totalCount,
+      withStars: result.stats.withStarsCount,
+      fetchedRepos: result.repositories.length
     }
   };
 }

@@ -18,13 +18,15 @@ export class ResultsPresenter {
     console.log(chalk.bold.cyan('═'.repeat(50)) + '\n');
   }
 
-  displayTable(repositories: Repository[], stats: DependentStats, entityType: string): void {
+  displayTable(repositories: Repository[], latestDependents: Repository[], stats: DependentStats, entityType: string): void {
     if (repositories.length === 0) {
       console.log(chalk.yellow(`No ${entityType} found`));
       return;
     }
 
-    const table = new Table({
+    // Display top repositories by stars
+    console.log(chalk.bold.green(`\n🌟 Top ${entityType} by stars:`));
+    const starsTable = new Table({
       head: ['URL', 'Stars'],
       style: {
         head: ['cyan']
@@ -32,10 +34,25 @@ export class ResultsPresenter {
     });
 
     for (const repo of repositories) {
-      table.push([repo.url, formatStars(repo.stars)]);
+      starsTable.push([repo.url, formatStars(repo.stars)]);
     }
 
-    console.log(table.toString());
+    console.log(starsTable.toString());
+
+    // Display latest dependents
+    console.log(chalk.bold.blue(`\n🕒 Latest ${entityType}:`));
+    const latestTable = new Table({
+      head: ['URL', 'Stars'],
+      style: {
+        head: ['blue']
+      }
+    });
+
+    for (const repo of latestDependents) {
+      latestTable.push([repo.url, formatStars(repo.stars)]);
+    }
+
+    console.log(latestTable.toString());
 
     if (stats.totalCount > 0) {
       console.log(chalk.gray(`\nFound ${stats.totalCount} ${entityType}, others are private`));
@@ -43,20 +60,25 @@ export class ResultsPresenter {
     }
   }
 
-  displayJson(repositories: Repository[]): void {
-    console.log(JSON.stringify(repositories, null, 2));
+  displayJson(repositories: Repository[], latestDependents: Repository[]): void {
+    const result = {
+      repositories,
+      latestDependents
+    };
+    console.log(JSON.stringify(result, null, 2));
   }
 
   display(
-    repositories: Repository[], 
-    stats: DependentStats, 
+    repositories: Repository[],
+    latestDependents: Repository[],
+    stats: DependentStats,
     entityType: string,
     format: 'table' | 'json'
   ): void {
     if (format === 'json') {
-      this.displayJson(repositories);
+      this.displayJson(repositories, latestDependents);
     } else {
-      this.displayTable(repositories, stats, entityType);
+      this.displayTable(repositories, latestDependents, stats, entityType);
     }
   }
 }
