@@ -18,46 +18,55 @@ export class DependentsParser {
 
   parseDependents(html: string, minStars: number, currentRepoUrl: string): {
     repositories: Repository[];
+    allRepositories: Repository[];
     stats: Partial<DependentStats>;
   } {
     const $ = cheerio.load(html);
     const repositories: Repository[] = [];
+    const allRepositories: Repository[] = [];
     let withStarsCount = 0;
-    
+
     const dependents = $(SELECTORS.DEPENDENT_ITEM).toArray();
-    
+
     for (const dep of dependents) {
       const $dep = $(dep);
       const starsElement = $dep.find(SELECTORS.STARS);
-      
+
       if (starsElement.length === 0) {
         continue; // Private or inaccessible repository
       }
-      
+
       const starsText = starsElement.first().text().trim();
       const stars = parseInt(starsText.replace(/,/g, ''), 10);
-      
+
       if (stars > 0) {
         withStarsCount++;
       }
-      
-      if (stars >= minStars) {
-        const repoLink = $dep.find(SELECTORS.REPO_LINK).first();
-        const relativeUrl = repoLink.attr('href');
-        
-        if (relativeUrl) {
-          const repoUrl = `${CONFIG.GITHUB.BASE_URL}${relativeUrl}`;
-          
-          // Skip self-reference and duplicates
-          if (repoUrl !== currentRepoUrl && !this.isDuplicate(repoUrl, repositories)) {
+
+      const repoLink = $dep.find(SELECTORS.REPO_LINK).first();
+      const relativeUrl = repoLink.attr('href');
+
+      if (relativeUrl) {
+        const repoUrl = `${CONFIG.GITHUB.BASE_URL}${relativeUrl}`;
+
+        // Skip self-reference
+        if (repoUrl !== currentRepoUrl) {
+          // Add to all repositories (for latest)
+          if (!this.isDuplicate(repoUrl, allRepositories)) {
+            allRepositories.push({ url: repoUrl, stars });
+          }
+
+          // Add to filtered repositories (for top by stars) if meets minStars
+          if (stars >= minStars && !this.isDuplicate(repoUrl, repositories)) {
             repositories.push({ url: repoUrl, stars });
           }
         }
       }
     }
-    
+
     return {
       repositories,
+      allRepositories,
       stats: {
         totalCount: dependents.length,
         withStarsCount
