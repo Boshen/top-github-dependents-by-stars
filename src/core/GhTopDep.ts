@@ -26,7 +26,7 @@ export class GhTopDep {
     this.presenter = new ResultsPresenter();
   }
 
-  async run(url: string): Promise<Repository[]> {
+  async run(url: string): Promise<{ repositories: Repository[]; latestDependents: Repository[]; stats: DependentStats }> {
     const dependentType = this.options.repositories ? DependentType.REPOSITORY : DependentType.PACKAGE;
     const entityType = this.options.repositories ? 'repositories' : 'packages';
 
@@ -35,19 +35,20 @@ export class GhTopDep {
     if (!pageUrl) return [];
 
     // Fetch all dependents
-    const { repositories, stats } = await this.fetchAllDependents(pageUrl, url);
+    const { repositories, latestRepositories, stats } = await this.fetchAllDependents(pageUrl, url);
 
-    // Sort and limit results
-    const sortedRepos = sortRepos(repositories, this.options.rows);
+    // Create two views of the data
+    const sortedRepos = sortRepos(repositories, this.options.rows); // Top by stars (from filtered list)
+    const latestDependents = latestRepositories; // Already limited in fetchAllDependents
 
     // Display results
     const format = this.options.table ? 'table' : 'json';
     if (format === 'table') {
       this.presenter.displayProjectInfo(url, entityType, this.options.packageName);
     }
-    this.presenter.display(sortedRepos, stats, entityType, format);
+    this.presenter.display(sortedRepos, latestDependents, stats, entityType, format);
 
-    return sortedRepos;
+    return { repositories: sortedRepos, latestDependents, stats };
   }
 
   private async buildDependentsUrl(repoUrl: string, dependentType: DependentType): Promise<string | null> {
@@ -94,41 +95,54 @@ export class GhTopDep {
   }
 
   private async fetchAllDependents(
-    initialUrl: string, 
+    initialUrl: string,
     currentRepoUrl: string
-  ): Promise<{ repositories: Repository[], stats: DependentStats }> {
-    const allRepositories: Repository[] = [];
+  ): Promise<{ repositories: Repository[], latestRepositories: Repository[], stats: DependentStats }> {
+    const filteredRepositories: Repository[] = [];
+    const latestRepositories: Repository[] = [];
     const stats: DependentStats = {
       totalCount: 0,
       withStarsCount: 0
     };
-    
+
     // Get total count for progress bar
     const firstPageHtml = await this.fetcher.fetchPage(initialUrl);
     const maxDeps = this.parser.parseDependentsCount(firstPageHtml);
-    
+
     this.progress.start(maxDeps);
-    
+
     let pageUrl: string | null = initialUrl;
     let processedCount = 0;
-    
+
     while (pageUrl) {
       const html = pageUrl === initialUrl ? firstPageHtml : await this.fetcher.fetchPage(pageUrl);
-      
+
       // Parse dependents from current page
-      const { repositories, stats: pageStats } = this.parser.parseDependents(
-        html, 
-        this.options.minstar, 
+      const { repositories, allRepositories, stats: pageStats } = this.parser.parseDependents(
+        html,
+        this.options.minstar,
         currentRepoUrl
       );
-      
-      allRepositories.push(...repositories);
+
+      filteredRepositories.push(...repositories);
+
+      // Only collect latest repositories up to the limit we need
+      if (latestRepositories.length < this.options.rows) {
+        const remaining = this.options.rows - latestRepositories.length;
+        latestRepositories.push(...allRepositories.slice(0, remaining));
+      }
+
       processedCount += pageStats.totalCount || 0;
       stats.totalCount += pageStats.totalCount || 0;
       stats.withStarsCount += pageStats.withStarsCount || 0;
 
-      // Get next page URL
+      // Get next page URL - stop early if we have enough latest repos and filtered repos
       pageUrl = this.parser.parseNextPageUrl(html);
+
+      // Can stop early if we have enough latest repos and a reasonable amount of filtered ones
+      if (latestRepositories.length >= this.options.rows && filteredRepositories.length >= this.options.rows * 2) {
+        // Optional: continue if we want more starred repos
+      }
 
       // Update progress - if this is the last page, set to 100%
       if (!pageUrl) {
@@ -139,7 +153,7 @@ export class GhTopDep {
     }
 
     this.progress.stop();
-    
-    return { repositories: allRepositories, stats };
+
+    return { repositories: filteredRepositories, latestRepositories, stats };
   }
 }
